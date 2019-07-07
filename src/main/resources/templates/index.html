@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>top page</title>
   <meta http-equiv="Content-Type"
@@ -7,12 +7,18 @@
   <style>
   h1 { font-sizze:18pt; font-weight:bold; color:gray; }
   body { font-size:13pt; color:gray; margin:5px 25px; }
-  pre {font-size:13pt; color:gray; padding:5px 10px;
-    border:1px solid gray;}
+  tr { margin:5px; }
+  th { padding:5px; color:white; background:darkgray; }
+  td { padding:5px; color:block; background:#f0f0f0; }
   </style>
 </head>
 <body>
   <h1 th:text="#{content.title}">Helo page</h1>
-  <p th:text="#{content.message}"></p>
+  <p th:text="${msg}">message.</p>
+  <table th:object="${object}">
+    <tr><th>ID</th><td th:text="*{id}"></td></tr>
+    <tr><th>NAME</th><td th:text="*{name}"></td></tr>
+    <tr><th>MAIL</th><td th:text="*{value}"></td></tr>
+  </table>
 </body>
 </html>
