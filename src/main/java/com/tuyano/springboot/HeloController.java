@@ -14,19 +14,18 @@ public class HeloController {
 			"hanako@flower","taro@yamda",
 			"sachiko@happy", "ichiro@baseball"};
 
-	@RequestMapping("/{id}")
-	public ModelAndView index(@PathVariable int id,
+	@RequestMapping("/{month}")
+	public ModelAndView index(@PathVariable int month,
 			ModelAndView mav) {
 		mav.setViewName("index");
-		mav.addObject("id",id);
-		mav.addObject("check",id >= 0);
-		mav.addObject("trueVal","POSITIVE!");
-		mav.addObject("falseVal","negative...");
+		int m = Math.abs(month) % 12;
+		m = m ==0 ? 12 : m;
+		mav.addObject("month", m);
+		mav.addObject("check", Math.floor(m / 3));
 		return mav;
 	}
-
-
 }
+
 
 class DataObject {
 	private int id;
