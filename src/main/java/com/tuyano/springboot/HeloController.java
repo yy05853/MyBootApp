@@ -19,9 +19,9 @@ public class HeloController {
 			ModelAndView mav) {
 		mav.setViewName("index");
 		mav.addObject("id",id);
-		mav.addObject("check",id % 2 == 0);
-		mav.addObject("trueVal","Even number!");
-		mav.addObject("falseVal","Odd Number...");
+		mav.addObject("check",id >= 0);
+		mav.addObject("trueVal","POSITIVE!");
+		mav.addObject("falseVal","negative...");
 		return mav;
 	}
 
