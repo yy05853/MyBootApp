@@ -14,8 +14,6 @@
 </head>
 <body>
   <h1 th:text="#{content.title}">Helo page</h1>
-  <div th:object="${object}">
-    <p th:text="|my name is *{name}. mail address is *{value}.|">message.</p>
-  </div>
+  <p th:utext="${msg}">message.</p>
 </body>
 </html>
