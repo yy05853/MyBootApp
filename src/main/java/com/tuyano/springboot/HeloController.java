@@ -1,6 +1,5 @@
 package com.tuyano.springboot;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,11 +13,9 @@ public class HeloController {
 			"hanako@flower","taro@yamda",
 			"sachiko@happy", "ichiro@baseball"};
 
-	@RequestMapping("/{tax}")
-	public ModelAndView index(@PathVariable int tax,
-			ModelAndView mav) {
+	@RequestMapping("/")
+	public ModelAndView index(ModelAndView mav) {
 		mav.setViewName("index");
-		mav.addObject("tax",tax);
 		return mav;
 	}
 }
