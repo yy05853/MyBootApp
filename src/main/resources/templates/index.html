@@ -14,17 +14,12 @@
 </head>
 <body>
   <h1 th:text="#{content.title}">Helo page</h1>
-  <table>
-  	<tr>
-  		<th>NAME</th>
-  		<th>MAIL</th>
-  		<th>TEL</th>
-  	</tr>
-  	<tr th:each="obj:${data}">
-	  	<td th:text="${obj[0]}"></td>
-  		<td th:text="${obj[1]}"></td>
-  		<td th:text="${obj[2]}"></td>
-	</tr>
+  <p th:text="|expression[ ${check} ]|"></p>
+  <table th:object="${data.get(__${check}__)}">
+  	<tr><th>ID</th><td th:text="*{id}"></td></tr>
+  	<tr><th>NAME</th><td th:text="*{name}"></td></tr>
+  	<tr><th>MAIL</th><td th:text="*{value}"></td></tr>
+
   </table>
 </body>
 </html>
