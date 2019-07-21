@@ -1,7 +1,6 @@
 package com.tuyano.springboot;
 
-import java.util.ArrayList;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,15 +14,11 @@ public class HeloController {
 			"hanako@flower","taro@yamda",
 			"sachiko@happy", "ichiro@baseball"};
 
-	@RequestMapping("/")
-	public ModelAndView index(ModelAndView mav) {
+	@RequestMapping("/{tax}")
+	public ModelAndView index(@PathVariable int tax,
+			ModelAndView mav) {
 		mav.setViewName("index");
-		ArrayList<DataObject> data = new ArrayList<DataObject>();
-		data.add(new DataObject(0,"taro","taro@yamada"));
-		data.add(new DataObject(1,"hanako","hanako@flower"));
-		data.add(new DataObject(2,"sachiko","sachiko@happy"));
-
-		mav.addObject("data",data);
+		mav.addObject("tax",tax);
 		return mav;
 	}
 }
