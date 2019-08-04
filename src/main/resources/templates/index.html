@@ -17,6 +17,10 @@
   <h1 th:text="#{content.title}">Helo page</h1>
   <table>
   <form method="post" action="/" th:object="${formModel}">
+    <ul>
+      <li th:each="error : ${#fields.detailedErrors()}"
+        class="err" th:text="${error.message}" />
+    </ul>
   <tr><td><label for="name">名前</label></td>
       <td><input type="text" name="name" th:value="*{name}" /></td></tr>
   <tr><td><label for="age">年齢</label></td>
