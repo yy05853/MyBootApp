@@ -64,21 +64,21 @@ public class HeloController {
 		d1.setName("tuyano");
 		d1.setAge(123);
 		d1.setMail("syoda@tuyano.com");
-		d1.setMemo("this is my data!");
+		d1.setMemo("090-999-999");
 		repository.saveAndFlush(d1);
 		// 2つ目のダミーデータ作成
 		MyData d2 = new MyData();
 		d2.setName("hanako");
 		d2.setAge(15);
 		d2.setMail("hanako@flower");
-		d2.setMemo("my girl firend.");
+		d2.setMemo("080-888-888");
 		repository.saveAndFlush(d2);
 		// 3つ目のダミーデータ作成
 		MyData d3 = new MyData();
 		d3.setName("sachiko");
 		d3.setAge(37);
 		d3.setMail("sachico@happy");
-		d3.setMemo("my work friend...");
+		d3.setMemo("070-777-777");
 		repository.saveAndFlush(d3);
 
 	}
