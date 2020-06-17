@@ -1,19 +1,17 @@
 package com.tuyano.springboot;
 
-import java.util.Optional;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tuyano.springboot.repositories.MyDataRepository;
@@ -24,41 +22,41 @@ public class HeloController {
 	@Autowired
 	MyDataRepository repository;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView index(
-			@ModelAttribute("formModel") MyData mydata,
-			ModelAndView mav) {
-		mav.setViewName("index");
-		mav.addObject("msg","this is sample content.");
-		mav.addObject("formModel",mydata);
-		Iterable<MyData> list = repository.findAll();
-		mav.addObject("datalist",list);
+	@PersistenceContext
+	EntityManager entityManager;
+
+	MyDataDaoImple dao;
+
+	@RequestMapping(value = "/find", method = RequestMethod.GET)
+	public ModelAndView find(ModelAndView mav) {
+		mav.setViewName("find");
+		mav.addObject("title","Find Page");
+		mav.addObject("msg","MyDataのサンプルです。");
+		mav.addObject("value","");
+		Iterable<MyData> list = dao.getAll();
+		mav.addObject("datalist", list);
 		return mav;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-	@Transactional(readOnly=false)
-	public ModelAndView form(
-			@ModelAttribute("formModel")
-			@Validated MyData mydata,
-			BindingResult result,
-			ModelAndView mov) {
-		ModelAndView res = null;
-		if (!result.hasErrors()) {
-			repository.saveAndFlush(mydata);
-			res = new ModelAndView("redirect:/");
-		}else {
-			mov.setViewName("index");
-			mov.addObject("msg","sorry, error is occured...");
-			Iterable<MyData> list = repository.findAll();
-			mov.addObject("datalist",list);
-			res = mov;
+	@RequestMapping(value = "/find", method = RequestMethod.POST)
+	public ModelAndView searc(HttpServletRequest request, ModelAndView mav) {
+		mav.setViewName("find");
+		String param = request.getParameter("fstr");
+		if(param == "") {
+			mav = new ModelAndView("redirect:/find");
+		} else {
+			mav.addObject("title","Find result");
+			mav.addObject("msg","「" + param + "」の検索結果");
+			mav.addObject("value", param);
+			List<MyData> list = dao.find(param);
+			mav.addObject("datalist",list);
 		}
-		return res;
+		return mav;
 	}
 
 	@PostConstruct
 	public void init() {
+		dao = new MyDataDaoImple(entityManager);
 		// 1つ目のダミーデータ作成
 		MyData d1 = new MyData();
 		d1.setName("tuyano");
@@ -83,42 +81,17 @@ public class HeloController {
 
 	}
 
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	public ModelAndView edit(@ModelAttribute MyData mydata,
-			@PathVariable int id, ModelAndView mav) {
-		mav.setViewName("edit");
-		mav.addObject("title","edit mydata.");
-		Optional<MyData> data = repository.findById((long)id);
-		mav.addObject("formModel",data.get());
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView index(
+			@ModelAttribute("formModel") MyData mydata,
+			ModelAndView mav) {
+		mav.setViewName("index");
+		mav.addObject("msg","this is sample content.");
+		Iterable<MyData> list = dao.getAll();
+		mav.addObject("datalist",list);
 		return mav;
 	}
-
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	@Transactional(readOnly=false)
-	public ModelAndView update(@ModelAttribute MyData mydata,
-			ModelAndView mav) {
-		repository.saveAndFlush(mydata);
-		return new ModelAndView("redirect:/");
-	}
-
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public ModelAndView delete(@PathVariable int id,
-			ModelAndView mav) {
-		mav.setViewName("delete");
-		mav.addObject("title","delete mydata.");
-		Optional<MyData> data = repository.findById((long)id);
-		mav.addObject("formModel", data.get());
-		return mav;
-	}
-
-	@RequestMapping(value = "/delete", method = RequestMethod.POST)
-	@Transactional(readOnly=false)
-	public ModelAndView remove(@RequestParam long id,
-			ModelAndView mav) {
-		repository.deleteById(id);
-		return new ModelAndView("redirect:/");
-	}
-
 
 }
 
