@@ -9,11 +9,16 @@ import javax.persistence.PersistenceContext;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.tuyano.springboot.repositories.MyDataRepository;
 
 @Controller
@@ -26,6 +31,39 @@ public class HeloController {
 	EntityManager entityManager;
 
 	MyDataDaoImple dao;
+
+	@RequestMapping(value = "/ajax", method = RequestMethod.GET)
+	public ModelAndView ajax(ModelAndView mav) {
+		mav.setViewName("ajax");
+		mav.addObject("hello4Form", new Hello4Form());
+		return mav;
+	}
+
+	@RequestMapping(value = "/ajax2", method = RequestMethod.GET)
+	@ResponseBody
+	public String getJsonData(ModelMap model) {
+	     Gson gson = new Gson();
+	     return gson.toJson("JSONで値受け渡しのテスト");
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(ModelAndView mav) {
+		mav.setViewName("edit");
+		mav.addObject("formModel", new FormModel());
+		return mav;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	public ModelAndView editRun(@Validated FormModel form, BindingResult br,ModelAndView mav) {
+
+        if (br.hasErrors()) {
+    		mav.setViewName("edit");
+            return mav;
+        }
+		mav.setViewName("edit");
+        return mav;
+	}
+
 
 	@RequestMapping(value = "/find", method = RequestMethod.GET)
 	public ModelAndView find(ModelAndView mav) {
@@ -57,27 +95,27 @@ public class HeloController {
 	@PostConstruct
 	public void init() {
 		dao = new MyDataDaoImple(entityManager);
-		// 1つ目のダミーデータ作成
-		MyData d1 = new MyData();
-		d1.setName("tuyano");
-		d1.setAge(123);
-		d1.setMail("syoda@tuyano.com");
-		d1.setMemo("090999999");
-		repository.saveAndFlush(d1);
-		// 2つ目のダミーデータ作成
-		MyData d2 = new MyData();
-		d2.setName("hanako");
-		d2.setAge(15);
-		d2.setMail("hanako@flower");
-		d2.setMemo("080888888");
-		repository.saveAndFlush(d2);
-		// 3つ目のダミーデータ作成
-		MyData d3 = new MyData();
-		d3.setName("sachiko");
-		d3.setAge(37);
-		d3.setMail("sachico@happy");
-		d3.setMemo("070777777");
-		repository.saveAndFlush(d3);
+//		// 1つ目のダミーデータ作成
+//		MyData d1 = new MyData();
+//		d1.setName("tuyano");
+//		d1.setAge(123);
+//		d1.setMail("syoda@tuyano.com");
+//		d1.setMemo("090999999");
+//		repository.saveAndFlush(d1);
+//		// 2つ目のダミーデータ作成
+//		MyData d2 = new MyData();
+//		d2.setName("hanako");
+//		d2.setAge(15);
+//		d2.setMail("hanako@flower");
+//		d2.setMemo("080888888");
+//		repository.saveAndFlush(d2);
+//		// 3つ目のダミーデータ作成
+//		MyData d3 = new MyData();
+//		d3.setName("sachiko");
+//		d3.setAge(37);
+//		d3.setMail("sachico@happy");
+//		d3.setMemo("070777777");
+//		repository.saveAndFlush(d3);
 
 	}
 

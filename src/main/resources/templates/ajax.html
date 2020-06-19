@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>edit page</title>
+  <meta http-equiv="Content-Type"
+    content="text/html; charset=UTF-8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+<!--
+$(function() {
+// Ajax通信テスト ボタンクリック
+        $("#inputPid").blur(function() {
+event.preventDefault();
+// outputDataを空に初期化
+               $.ajax({
+                     type : "GET",
+                     url : "ajax2",
+                     dataType : "json",
+                     success : function(data,status,xhr) {
+                             $("#chktest").val(data);
+                      },
+                     error : function(XMLHttpRequest, textStatus, errorThrown) {
+                              alert("error:" + XMLHttpRequest + "/" + textStatus + "/" + errorThrown);
+                      }
+             });
+       });
+});
+//-->
+</script>
+
+</head>
+<body>
+  <form role="form" id="hello4Form" action="/outpg01" th:action="@{/outpg01}" th:object="${hello4Form}" method="post">
+    <p class="msg" th:text="#{please.pid2}">何か入力するとJSONテストの文字列を下のボックスにいれます</p>
+    <input type="text" id="inputPid" name="inputPid" th:field="*{inputPid}" />
+    <br />
+    <input type="text" id="chktest" name="chktest" th:field="*{chktest}" />
+    <br />
+
+  </form>
+
+</body>
+</html>
